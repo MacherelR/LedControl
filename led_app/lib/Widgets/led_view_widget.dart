@@ -13,6 +13,11 @@ class LedViewWidget extends StatefulWidget{
 }
 
 class _LedViewWidgetState extends State<LedViewWidget>{
+
+  @override
+  void dispose() {
+    super.dispose();
+  }
   @override
   Widget build(BuildContext context) {
     return BlocBuilder<LedBloc,LedState>(builder: (context,state) {

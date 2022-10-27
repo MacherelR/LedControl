@@ -8,8 +8,12 @@ import 'package:led_app/Repository/led_Ctl_repository.dart';
 class LedBloc extends Bloc<LedEvent,LedState>{
   LedBloc({required LedRepository ledRepository})
       : _ledRepository = ledRepository,
-        super(LedState(status: LedStatus.initial));
+        super(LedState(status: LedStatus.initial)){
+    on<LedSubscriptionRequested>(_onLedSubscriptionRequested);
+    on<LedsValuesModified>(_onLedsValuesModified);
+    }
 
+  
   final LedRepository _ledRepository;
 
   Future<void> _onLedSubscriptionRequested(LedSubscriptionRequested event, Emitter<LedState> emit) async {

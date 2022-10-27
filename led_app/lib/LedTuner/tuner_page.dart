@@ -13,9 +13,10 @@ class TunerScreen extends StatelessWidget{
 
   @override
   Widget build(BuildContext context){
+    // return Text("Coucou debug");
     return BlocProvider(
         create: (context) => LedBloc(
-          ledRepository: context.read<LedRepository>()
+          ledRepository: context.read<LedRepository>(),
           )..add(const LedSubscriptionRequested()),
         child: const TunerView(),
     );
