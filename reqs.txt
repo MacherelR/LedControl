@@ -1,0 +1,10 @@
+Avoir des sharedprefs pour mémoriser la valeur RGB.
+Utiliser le cubit Home pour le menubar.
+Avoir un btn sur mainView pour envoyer les data au RPi. (ou alors envoyer à chaque fois que ça change)
+Allumer/eteindre les leds --> Maybe 3ème vue a mettre en place.
+
+
+voir comment setup une connection (wifi ou bluetooth vers le Rpi)
+    Peut être que le wifi est plus simple, à voir
+
+Faire d'abord le coté app et tester les data qu'on envoie. après gérer côté rpi
