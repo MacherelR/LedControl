@@ -18,6 +18,7 @@ class DataBloc extends Bloc<DataEvent, DataState> {
   final LedRepository _ledRepository;
 
   Future<void> _onDataEdited(DataEdited event, Emitter<DataState> emit) async {
+    print("Data edited with values: ${event.values.rValue}");
     emit(state.copyWith(status: DataStatus.loading));
     try {
       await _ledRepository.saveSettings(event.values);

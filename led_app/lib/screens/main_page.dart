@@ -6,6 +6,7 @@ import 'package:led_app/repository/led_repository.dart';
 import 'package:provider/provider.dart';
 
 import '../bloc/data_state.dart';
+import '../models/settings.dart';
 
 class MainPage extends StatelessWidget {
   const MainPage({Key? key}) : super(key: key);
@@ -37,23 +38,29 @@ class MainView extends StatelessWidget {
                 SizedBox(
                   width: 100,
                   child: TextFormField(
-                    decoration: const InputDecoration(
-                      border: OutlineInputBorder(),
-                      labelText: "R",
-                      hintText: "Red component value",
-                    ),
-                    initialValue: state.values.rValue.toString(),
-                    validator: (String? value) {
-                      if (value != null) {
-                        var val = int.tryParse(value);
-                        if (val == null || val < 0 || val > 255) {
-                          return "Value must be integer between 0 and 255";
+                      decoration: const InputDecoration(
+                        border: OutlineInputBorder(),
+                        labelText: "R",
+                        hintText: "Red component value",
+                      ),
+                      initialValue: state.values.rValue.toString(),
+                      validator: (value) {
+                        print("Validator called");
+                        if (value != null) {
+                          var val = int.tryParse(value);
+                          print("tryparse: $val");
+                          if (val == null || val < 0 || val > 255) {
+                            return "Value must be integer between 0 and 255";
+                          }
+                          return val.toString();
                         }
-                        return val.toString();
-                      }
-                      return "Null value inserted";
-                    },
-                  ),
+                        return "Null value inserted";
+                      },
+                      onChanged: (value) => context.read<DataBloc>().add(
+                          DataEdited(LedControllerSettings(
+                              rVal: state.values.rValue,
+                              gVal: state.values.gValue,
+                              bVal: state.values.bValue)))),
                 ),
                 SizedBox(
                   width: 100,
