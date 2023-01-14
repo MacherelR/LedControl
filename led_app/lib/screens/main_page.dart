@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:led_app/bloc/data_bloc.dart';
 import 'package:led_app/bloc/data_event.dart';
@@ -6,6 +7,8 @@ import 'package:led_app/repository/led_repository.dart';
 import 'package:provider/provider.dart';
 
 import '../bloc/data_state.dart';
+import '../models/numberColorSelector.dart';
+import '../models/numberInput.dart';
 import '../models/settings.dart';
 
 class MainPage extends StatelessWidget {
@@ -17,96 +20,78 @@ class MainPage extends StatelessWidget {
       create: (context) => DataBloc(
         ledRepository: context.read<LedRepository>(),
       )..add(const DataSubscriptionRequested()),
-      child: const MainView(),
+      child: MainView(),
     );
   }
 }
 //Text(state.values.rValue.toString())
 
 class MainView extends StatelessWidget {
-  const MainView({Key? key}) : super(key: key);
-
+  // ignore: prefer_const_constructors_in_immutables
+  MainView({Key? key}) : super(key: key);
+  late ColorSelector colorSelector;
   @override
   Widget build(BuildContext context) {
     return BlocBuilder<DataBloc, DataState>(
       builder: (context, state) {
-        return Scaffold(
-          body: Center(
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                SizedBox(
-                  width: 100,
-                  child: TextFormField(
-                      decoration: const InputDecoration(
-                        border: OutlineInputBorder(),
-                        labelText: "R",
-                        hintText: "Red component value",
-                      ),
-                      initialValue: state.values.rValue.toString(),
-                      validator: (value) {
-                        print("Validator called");
-                        if (value != null) {
-                          var val = int.tryParse(value);
-                          print("tryparse: $val");
-                          if (val == null || val < 0 || val > 255) {
-                            return "Value must be integer between 0 and 255";
-                          }
-                          return val.toString();
-                        }
-                        return "Null value inserted";
-                      },
-                      onChanged: (value) => context.read<DataBloc>().add(
-                          DataEdited(LedControllerSettings(
-                              rVal: state.values.rValue,
-                              gVal: state.values.gValue,
-                              bVal: state.values.bValue)))),
-                ),
-                SizedBox(
-                  width: 100,
-                  child: TextFormField(
-                    decoration: const InputDecoration(
-                      border: OutlineInputBorder(),
-                      labelText: "G",
-                      hintText: "Green component value",
+        // return Scaffold(
+        //   body: Center(
+        //     child: Row(
+        //       mainAxisAlignment: MainAxisAlignment.center,
+        //       children: [
+        //         SizedBox(
+        //           width: 100,
+        //           child: NumberInputField(
+        //             label: "R",
+        //             initialValue: state.values.rValue.toString(),
+        //             onChanged: (value) => context.read<DataBloc>().add(
+        //                 DataEdited(LedControllerSettings(
+        //                     rVal: state.values.rValue,
+        //                     gVal: state.values.gValue,
+        //                     bVal: state.values.bValue))),
+        //           ),
+        //         ),
+        //         SizedBox(
+        //           width: 100,
+        //           child: NumberInputField(
+        //             label: "G",
+        //             initialValue: state.values.gValue.toString(),
+        //             onChanged: (value) => context.read<DataBloc>().add(
+        //                 DataEdited(LedControllerSettings(
+        //                     rVal: state.values.rValue,
+        //                     gVal: state.values.gValue,
+        //                     bVal: state.values.bValue))),
+        //           ),
+        //         ),
+        //         SizedBox(
+        //           width: 100,
+        //           child: NumberInputField(
+        //             label: "B",
+        //             initialValue: state.values.bValue.toString(),
+        //             onChanged: (value) => context.read<DataBloc>().add(
+        //                 DataEdited(LedControllerSettings(
+        //                     rVal: state.values.rValue,
+        //                     gVal: state.values.gValue,
+        //                     bVal: state.values.bValue))),
+        //           ),
+        //         ),
+        //       ],
+        //     ),
+        //   ),
+        // );
+        return colorSelector = ColorSelector(
+            rValue: state.values.rValue,
+            gValue: state.values.gValue,
+            bValue: state.values.bValue,
+            onChanged: () => context.read<DataBloc>().add(
+                  DataEdited(
+                    LedControllerSettings(
+                      rVal: colorSelector.rValue,
+                      gVal: colorSelector.gValue,
+                      bVal: colorSelector.bValue,
                     ),
-                    initialValue: state.values.gValue.toString(),
-                    validator: (String? value) {
-                      if (value != null) {
-                        var val = int.tryParse(value);
-                        if (val == null || val < 0 || val > 255) {
-                          return "Value must be integer between 0 and 255";
-                        }
-                        return val.toString();
-                      }
-                      return "Null value inserted";
-                    },
                   ),
-                ),
-                SizedBox(
-                  width: 100,
-                  child: TextFormField(
-                    decoration: const InputDecoration(
-                      border: OutlineInputBorder(),
-                      labelText: "B",
-                    ),
-                    initialValue: state.values.bValue.toString(),
-                    validator: (String? value) {
-                      if (value != null) {
-                        var val = int.tryParse(value);
-                        if (val == null || val < 0 || val > 255) {
-                          return "Value must be integer between 0 and 255";
-                        }
-                        return val.toString();
-                      }
-                      return "Null value inserted";
-                    },
-                  ),
-                ),
-              ],
-            ),
-          ),
-        );
+                ));
       },
     );
   }
