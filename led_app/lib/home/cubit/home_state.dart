@@ -1,6 +1,6 @@
 part of 'home_cubit.dart';
 
-enum HomeTab { main, settings }
+enum HomeTab { main, settings, colorPicker }
 
 class HomeState {
   const HomeState({this.tab = HomeTab.main});

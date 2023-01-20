@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:led_app/home/cubit/home_cubit.dart';
 
+import '../../screens/color_picker.dart';
 import '../../screens/main_page.dart';
 import '../../screens/settings_page.dart';
 
@@ -30,8 +31,11 @@ class HomeView extends StatelessWidget {
       appBar: AppBar(
         title: const Text("Tasks"),
       ),
-      body:
-          selectedTab == HomeTab.main ? const MainPage() : const SettingsPage(),
+      body: selectedTab == HomeTab.main
+          ? const MainPage()
+          : selectedTab == HomeTab.settings
+              ? SettingsPage()
+              : ColorPicker(),
       bottomNavigationBar: BottomNavigationBar(
         currentIndex: HomeTab.values.indexOf(selectedTab),
         items: const [
@@ -39,6 +43,9 @@ class HomeView extends StatelessWidget {
               icon: Icon(Icons.live_tv_rounded), label: "Main"),
           BottomNavigationBarItem(
               icon: Icon(Icons.settings), label: "Settings"),
+          BottomNavigationBarItem(
+              icon: Icon(Icons.wheelchair_pickup_rounded),
+              label: "ColorPicker"),
         ],
         onTap: (index) {
           context.read<HomeCubit>().setTab(HomeTab.values[index]);
